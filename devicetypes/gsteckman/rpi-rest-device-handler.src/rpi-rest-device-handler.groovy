@@ -109,9 +109,7 @@ def poll() {
 def refresh() {
 	log.debug "Executing 'refresh'"
     parent.sendHubCommand(get("/door"));
-    log.debug "calling parent.sendHubCommand(get(\"/gpios/4\"));"
-    parent.sendHubCommand(get("/gpios/4"));
-    
+   
     childDevices.each{
     	it.refresh()
     }
