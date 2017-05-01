@@ -1,5 +1,19 @@
 package io.github.gsteckman.rpi_rest;
 
+/*
+ * RestGpioController.java
+ * 
+ * Copyright 2017 Greg Steckman
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing permissions and limitations under the License.
+ *
+ */
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,16 +37,9 @@ import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.RaspiBcmPin;
 
 /**
- * RestGpioController.java
+ * This class implements a REST interface to the Raspberry Pi GPIO.
  * 
- * Copyright 2017 Greg Steckman
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at:
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
- * implied. See the License for the specific language governing permissions and limitations under the License.
+ * @author Greg Steckman
  *
  */
 @RestController
@@ -43,6 +50,12 @@ public class RestGpioController {
     private GpioPinDigitalOutput pin4;
     private GpioPinDigitalOutput pin17;
 
+    /**
+     * Creates a new instance using the specified GpioController.
+     * 
+     * @param gpioCtrl
+     *            GpioController to be used for controlling GPIO resources.
+     */
     public RestGpioController(final GpioController gpioCtrl) {
         gpio = gpioCtrl;
         pin4 = gpio.provisionDigitalOutputPin(RaspiBcmPin.GPIO_04, PinState.LOW);
@@ -138,6 +151,13 @@ public class RestGpioController {
         return null;
     }
 
+    /**
+     * GET handler to return status of a gpio pin.
+     * 
+     * @param address
+     *            Pin for which to return status.
+     * @return Map of pin state attributes, which Spring Framework converts to a JSON formatted HTTP response.
+     */
     @GetMapping(path = "/gpios/{address}")
     public Map<String, Object> getGpio(@PathVariable int address) {
         LOG.debug("getGpio");
@@ -151,6 +171,11 @@ public class RestGpioController {
         return null;
     }
 
+    /**
+     * Provides the status of all GPIO pins.
+     * 
+     * @return A list of Maps of pin state attributes, one per pin, which Spring Framework converts to a JSON formatted HTTP response.
+     */
     @GetMapping(path = "/gpios")
     public List<Map<String, Object>> getGpios() {
         LOG.debug("getGpios");
@@ -160,6 +185,9 @@ public class RestGpioController {
         return l;
     }
 
+    /**
+     * shuts down the GPIO.
+     */
     @PreDestroy
     public void shutdown() {
         gpio.shutdown();

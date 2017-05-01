@@ -1,5 +1,19 @@
 package io.github.gsteckman.rpi_rest;
 
+/*
+ * SsdpHandler.java
+ * 
+ * Copyright 2017 Greg Steckman
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing permissions and limitations under the License.
+ *
+ */
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -28,16 +42,12 @@ import com.nls.net.ssdp.SsdpPacketListener;
 import com.nls.net.ssdp.SsdpService;
 
 /**
- * SsdpHandler.java
+ * This class implements an SSDP endpoint that responds to M-SEARCH broadcast messages
+ * and periodically transmits NOTIFY messages as defined in the UPnP Device Architecture 1.1.
+ *  
+ * @see http://www.upnp.org/specs/arch/UPnP-arch-DeviceArchitecture-v1.1.pdf 
  * 
- * Copyright 2017 Greg Steckman
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at:
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
- * implied. See the License for the specific language governing permissions and limitations under the License.
+ * @author Greg Steckman
  *
  */
 public class SsdpHandler implements SsdpPacketListener {
@@ -57,10 +67,16 @@ public class SsdpHandler implements SsdpPacketListener {
     private MulticastSocket notifySocket;
     private Timer notifyTimer;
 
+    /** 
+     * @return The instance of this class.
+     */
     public static SsdpHandler getInstance() {
         return INSTANCE;
     }
 
+    /**
+     * Constructs a new instance of this class.
+     */
     private SsdpHandler() {
         LOG.info("Instantiating SsdpHandler");
 
@@ -98,6 +114,9 @@ public class SsdpHandler implements SsdpPacketListener {
         }
     }
 
+    /**
+     * Implements the SsdpPacketListener interface to respond to M-SEARCH messages.
+     */
     public void received(final SsdpPacket pkt) {
         LOG.debug(pkt);
         LOG.debug(pkt.getMessage());
@@ -225,6 +244,9 @@ public class SsdpHandler implements SsdpPacketListener {
 
     }
 
+    /**
+     * Closes sockets, frees resources and terminates threads. Called by Spring Framework prior to destroying the bean.
+     */
     @PreDestroy
     public void close() {
         LOG.info("closing SsdpHandler");
