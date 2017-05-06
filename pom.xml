@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.github.gsteckman</groupId>
+	<groupId>io.github.gsteckman</groupId>
 	<artifactId>rpi-rest</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
@@ -13,16 +13,6 @@
 	</parent>
 
 	<name>rpi-rest</name>
-
-	<repositories>
-		<repository>
-			<id>4thline-repo</id>
-			<url>http://4thline.org/m2</url>
-			<snapshots>
-				<enabled>false</enabled> <!-- Or true, if you like to use unreleased code -->
-			</snapshots>
-		</repository>
-	</repositories>
 
 	<dependencies>
 		<dependency>
