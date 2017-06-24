@@ -41,10 +41,23 @@ public void refresh(){
 // handle commands
 def on() {
 	log.debug "Executing 'on'"
-	parent.sendHubCommand(parent.post("/gpios/${device.deviceNetworkId}", [state: "HIGH"]))
+    def stateString="HIGH"
+    if(state.activeLow){
+    	stateString="LOW"
+    }
+	parent.sendHubCommand(parent.post("/gpios/${device.deviceNetworkId}", [state: stateString]))
 }
 
 def off() {
 	log.debug "Executing 'off'"
-	parent.sendHubCommand(parent.post("/gpios/${device.deviceNetworkId}", [state: "LOW"]))
+    def stateString = "LOW"
+    if(state.activeLow){
+    	stateString="HIGH"
+    }
+	parent.sendHubCommand(parent.post("/gpios/${device.deviceNetworkId}", [state: stateString]))
+}
+
+// Configures this pin to be an active low pin.
+public setActiveLow(){
+	state.activeLow=true;
 }
